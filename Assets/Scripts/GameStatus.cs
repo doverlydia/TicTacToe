@@ -3,23 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameStatus : MonoBehaviour
 {
     private bool _gameStarted;
     private bool _gameEnded;
     private bool _Xturn;
-    public bool gameStarted => _gameStarted;
-    public bool gameEnded => _gameEnded;
-    public bool Xturn => _Xturn;
-    [SerializeField] MiniMaxTicTacToe miniMax;
-    [SerializeField] TMP_Text gameEndText;
-    [SerializeField] TurnOrderManager turnOrder;
+    private TicTacToeCellManager[,] _cells = new TicTacToeCellManager[3, 3];
     private string[,] boardStatus = new string[3, 3] {{"","",""},
                                                       {"","",""},
                                                       {"","",""}};
+    public bool gameStarted => _gameStarted;
+    public bool gameEnded => _gameEnded;
+    public bool Xturn => _Xturn;
+
+    [SerializeField] private MiniMaxTicTacToe miniMax;
+    [SerializeField] private TMP_Text gameEndText;
+    [SerializeField] private TurnOrderManager turnOrder;
+    [SerializeField] private List<TicTacToeCellManager> cells;
+
     private void Start()
     {
+        foreach (var cell in cells)
+        {
+            _cells[(int)cell.cellLocationOnGrid.x, (int)cell.cellLocationOnGrid.y] = cell;
+        }
+
         _Xturn = true;
     }
     private bool ThreeEqualSymbols(string a, string b, string c)
@@ -68,7 +78,7 @@ public class GameStatus : MonoBehaviour
         }
         if (!_Xturn && !_gameEnded)
         {
-            miniMax.BestMove(boardStatus);
+            UpdateBestMoveCell(miniMax.BestMove(boardStatus, player == "X" ? "O" : "X"));
         }
     }
 
@@ -106,10 +116,23 @@ public class GameStatus : MonoBehaviour
                 boardStatus[x, y] = "";
             }
         }
-        foreach (var cell in miniMax.Cells)
+        foreach (var cell in _cells)
         {
-            cell.ClearCells();
+            cell.ClearCell();
         }
         turnOrder.ChangeTurnSprite(turnSprite.X);
+    }
+
+    public void UpdateBestMoveCell(Vector2 bestMove)
+    {
+        _cells[(int)bestMove.x, (int)bestMove.y].UpdateCellStatus();
+    }
+
+    public void Hint()
+    {
+        Vector2 bestMove = miniMax.BestMove(boardStatus, "X");
+        Debug.Log(bestMove);
+        TicTacToeCellManager hintCell = _cells[(int)bestMove.x, (int)bestMove.y];
+        //hintCell.StartCoroutine(hintCell.Flash(1, 3, "X"));
     }
 }

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class TicTacToeCellManager : MonoBehaviour
 {
-    [SerializeField] GameStatus gameStatus;
+    [SerializeField] private GameStatus gameStatus;
     [SerializeField] private Sprite imageX;
     [SerializeField] private Sprite imageO;
     [SerializeField] private Image cellImage;
@@ -40,9 +41,19 @@ public class TicTacToeCellManager : MonoBehaviour
         }
         cellEmpty = false;
     }
-    public void ClearCells()
+    public void ClearCell()
     {
         cellEmpty = true;
         cellImage.sprite = null;
     }
+    //public IEnumerator Flash(float fadeinOutTime, int numberOfFlashes, string XO)
+    //{
+    //    cellImage.sprite = XO == "X" ? imageX : imageO;
+    //    Tween fadeIn = cellImage.DOFade(255, fadeinOutTime);
+    //    Tween fadeOut = cellImage.DOFade(0, fadeinOutTime);
+    //    fadeIn.Play();
+    //    fadeIn.OnComplete(() => fadeOut.Play());
+    //    cellImage.sprite = null;
+    //    yield return null;
+    //}
 }

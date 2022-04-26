@@ -9,10 +9,10 @@ public enum turnSprite
 }
 public class TurnOrderManager : MonoBehaviour
 {
-    [SerializeField] GameStatus gameStatus;
-    [SerializeField] Sprite Ximage;
-    [SerializeField] Sprite Oimage;
-    [SerializeField] Image turnImage;
+    [SerializeField] private GameStatus gameStatus;
+    [SerializeField] private Sprite Ximage;
+    [SerializeField] private Sprite Oimage;
+    [SerializeField] private Image turnImage;
 
     private void Start()
     {
