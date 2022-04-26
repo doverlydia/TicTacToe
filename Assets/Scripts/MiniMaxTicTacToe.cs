@@ -6,6 +6,7 @@ public class MiniMaxTicTacToe : MonoBehaviour
     [SerializeField] GameStatus gameStatus;
     [SerializeField] List<TicTacToeCellManager> cells;
     TicTacToeCellManager[,] _cells = new TicTacToeCellManager[3, 3];
+    public TicTacToeCellManager[,] Cells => _cells;
     private void Start()
     {
         foreach (var cell in cells)

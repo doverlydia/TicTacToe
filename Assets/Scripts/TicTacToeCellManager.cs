@@ -37,8 +37,12 @@ public class TicTacToeCellManager : MonoBehaviour
                 player = "O";
             }
             gameStatus.UpdateGameStatus(_cellLocationOnGrid, player);
-            cellImage.enabled = true;
         }
         cellEmpty = false;
+    }
+    public void ClearCells()
+    {
+        cellEmpty = true;
+        cellImage.sprite = null;
     }
 }

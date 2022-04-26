@@ -14,6 +14,7 @@ public class GameStatus : MonoBehaviour
     public bool Xturn => _Xturn;
     [SerializeField] MiniMaxTicTacToe miniMax;
     [SerializeField] TMP_Text gameEndText;
+    [SerializeField] TurnOrderManager turnOrder;
     private string[,] boardStatus = new string[3, 3] {{"","",""},
                                                       {"","",""},
                                                       {"","",""}};
@@ -91,5 +92,24 @@ public class GameStatus : MonoBehaviour
                 gameEndText.text = "O won!";
                 return;
         }
+    }
+
+    public void RestartGame()
+    {
+        _gameEnded = false;
+        _gameStarted = false;
+        _Xturn = true;
+        for (int x = 0; x < 3; x++)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                boardStatus[x, y] = "";
+            }
+        }
+        foreach (var cell in miniMax.Cells)
+        {
+            cell.ClearCells();
+        }
+        turnOrder.ChangeTurnSprite(turnSprite.X);
     }
 }

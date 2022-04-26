@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+public enum turnSprite
+{
+    X,
+    O
+}
 public class TurnOrderManager : MonoBehaviour
 {
     [SerializeField] GameStatus gameStatus;
@@ -12,14 +16,26 @@ public class TurnOrderManager : MonoBehaviour
 
     private void Start()
     {
-        turnImage.sprite = Ximage;
+        ChangeTurnSprite(turnSprite.X);
     }
     public void ChangeTurnOrder()
     {
         if (!gameStatus.gameStarted)
         {
             gameStatus.UpdateGameStatus(Vector2.zero, "");
-            turnImage.sprite = Oimage;
+            ChangeTurnSprite(turnSprite.O);
+        }
+    }
+    public void ChangeTurnSprite(turnSprite sprite)
+    {
+        switch (sprite)
+        {
+            case turnSprite.X:
+                turnImage.sprite = Ximage;
+                return;
+            case turnSprite.O:
+                turnImage.sprite = Oimage;
+                return;
         }
     }
 }
