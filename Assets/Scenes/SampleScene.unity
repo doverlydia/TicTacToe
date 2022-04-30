@@ -455,7 +455,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Hint
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1594,6 +1594,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5628222771742587208, guid: 23bd6a2ae6ba5bf4dbfa07d7d3ef8a33,
         type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628222771742587208, guid: 23bd6a2ae6ba5bf4dbfa07d7d3ef8a33,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1616,6 +1621,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: PlayerInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 5741211825169880331, guid: 23bd6a2ae6ba5bf4dbfa07d7d3ef8a33,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5741211825169880331, guid: 23bd6a2ae6ba5bf4dbfa07d7d3ef8a33,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5741211825169880331, guid: 23bd6a2ae6ba5bf4dbfa07d7d3ef8a33,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5741211825169880331, guid: 23bd6a2ae6ba5bf4dbfa07d7d3ef8a33,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5741211825169880331, guid: 23bd6a2ae6ba5bf4dbfa07d7d3ef8a33,
         type: 3}
@@ -2503,6 +2528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0060b5745c60eb642accd2c1191c3f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _againstAI: 1
   miniMax: {fileID: 1714382694}
   gameEndText: {fileID: 1161235292}
   turnOrder: {fileID: 1823294870}
@@ -2516,6 +2542,7 @@ MonoBehaviour:
   - {fileID: 1375933916}
   - {fileID: 1310286530}
   - {fileID: 1885334269}
+  turnTimeLimit: 3
 --- !u!1 &1823294865
 GameObject:
   m_ObjectHideFlags: 0

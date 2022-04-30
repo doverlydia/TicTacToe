@@ -15,9 +15,14 @@ public class TicTacToeCellManager : MonoBehaviour
     private bool cellEmpty = true;
     public Vector2 cellLocationOnGrid => _cellLocationOnGrid;
 
+    private void Start()
+    {
+        cellImage.color = new Color(255, 255, 255, 0);
+    }
+
     public void PlayerInput()
     {
-        if (gameStatus.Xturn)
+        if (gameStatus.Xturn || !gameStatus.againstAI)
         {
             UpdateCellStatus();
         }
@@ -38,6 +43,7 @@ public class TicTacToeCellManager : MonoBehaviour
                 cellImage.sprite = imageO;
                 player = "O";
             }
+            cellImage.color = new Color(255, 255, 255, 255);
             gameStatus.UpdateGameStatus(_cellLocationOnGrid, player);
         }
         cellEmpty = false;
@@ -46,11 +52,13 @@ public class TicTacToeCellManager : MonoBehaviour
     {
         cellEmpty = true;
         cellImage.sprite = null;
+        cellImage.color = new Color(255, 255, 255, 0);
     }
     public IEnumerator Flash(float inTime, float outTime, int numberOfFlashes, string XO)
     {
         button.interactable = false;
         cellImage.sprite = XO == "X" ? imageX : imageO;
+        cellImage.color = new Color(255, 255, 255, 255);
         for (int i = 0; i < numberOfFlashes; i++)
         {
             yield return new WaitForSeconds(outTime);
@@ -59,6 +67,7 @@ public class TicTacToeCellManager : MonoBehaviour
             cellImage.color = new Color(255, 255, 255, 255);
         }
         cellImage.sprite = null;
+        cellImage.color = new Color(255, 255, 255, 0);
         button.interactable = true;
     }
 }

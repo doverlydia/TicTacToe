@@ -17,12 +17,15 @@ public class GameStatus : MonoBehaviour
     public bool gameStarted => _gameStarted;
     public bool gameEnded => _gameEnded;
     public bool Xturn => _Xturn;
+    public bool againstAI => _againstAI;
 
+    [SerializeField] private bool _againstAI = true;
     [SerializeField] private MiniMaxTicTacToe miniMax;
     [SerializeField] private TMP_Text gameEndText;
     [SerializeField] private TurnOrderManager turnOrder;
     [SerializeField] private List<TicTacToeCellManager> cells;
-
+    [SerializeField] private float turnTimeLimit = 3;
+    private float turnTimer;
     private void Start()
     {
         foreach (var cell in cells)
@@ -31,6 +34,20 @@ public class GameStatus : MonoBehaviour
         }
 
         _Xturn = true;
+        turnTimer = turnTimeLimit;
+    }
+    private void Update()
+    {
+        if (_gameStarted && !gameEnded)
+        {
+            turnTimer -= Time.deltaTime;
+            Debug.Log(turnTimer);
+
+            if (turnTimer <= 0)
+            {
+                GameEnding(Xturn ? "O" : "X");
+            }
+        }
     }
     private bool ThreeEqualSymbols(string a, string b, string c)
     {
@@ -71,17 +88,17 @@ public class GameStatus : MonoBehaviour
         _gameStarted = true;
         UpdateBoardStatus(clickedCell, player);
         _Xturn = !_Xturn;
+        turnTimer = turnTimeLimit;
         string result = CheckForWinner(boardStatus);
         if (result != null)
         {
             GameEnding(result);
         }
-        if (!_Xturn && !_gameEnded)
+        if (!_Xturn && !_gameEnded && _againstAI)
         {
             UpdateBestMoveCell(miniMax.BestMove(boardStatus, player == "X" ? "O" : "X"));
         }
     }
-
     private void UpdateBoardStatus(Vector2 clickedCell, string player)
     {
         boardStatus[(int)clickedCell.x, (int)clickedCell.y] = player;
@@ -109,6 +126,8 @@ public class GameStatus : MonoBehaviour
         _gameEnded = false;
         _gameStarted = false;
         _Xturn = true;
+        turnTimer = turnTimeLimit;
+        gameEndText.text = "";
         for (int x = 0; x < 3; x++)
         {
             for (int y = 0; y < 3; y++)
@@ -130,9 +149,9 @@ public class GameStatus : MonoBehaviour
 
     public void Hint()
     {
-        Vector2 bestMove = miniMax.BestMove(boardStatus, "X");
+        Vector2 bestMove = miniMax.BestMove(boardStatus, Xturn ? "X" : "O");
         Debug.Log(bestMove);
         TicTacToeCellManager hintCell = _cells[(int)bestMove.x, (int)bestMove.y];
-        hintCell.StartCoroutine(hintCell.Flash(0.2f, 0.2f, 2, "X"));
+        hintCell.StartCoroutine(hintCell.Flash(0.2f, 0.2f, 2, Xturn ? "X" : "O"));
     }
 }
