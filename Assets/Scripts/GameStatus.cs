@@ -133,6 +133,6 @@ public class GameStatus : MonoBehaviour
         Vector2 bestMove = miniMax.BestMove(boardStatus, "X");
         Debug.Log(bestMove);
         TicTacToeCellManager hintCell = _cells[(int)bestMove.x, (int)bestMove.y];
-        //hintCell.StartCoroutine(hintCell.Flash(1, 3, "X"));
+        hintCell.StartCoroutine(hintCell.Flash(0.2f, 0.2f, 2, "X"));
     }
 }
