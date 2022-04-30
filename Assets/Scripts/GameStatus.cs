@@ -24,8 +24,11 @@ public class GameStatus : MonoBehaviour
     [SerializeField] private TMP_Text gameEndText;
     [SerializeField] private TurnOrderManager turnOrder;
     [SerializeField] private List<TicTacToeCellManager> cells;
-    [SerializeField] private float turnTimeLimit = 3;
+    [SerializeField] private float turnTimeLimit = 5;
     private float turnTimer;
+
+    private Stack<Vector2> moves = new Stack<Vector2>();
+
     private void Start()
     {
         foreach (var cell in cells)
@@ -41,7 +44,6 @@ public class GameStatus : MonoBehaviour
         if (_gameStarted && !gameEnded)
         {
             turnTimer -= Time.deltaTime;
-            Debug.Log(turnTimer);
 
             if (turnTimer <= 0)
             {
@@ -96,7 +98,18 @@ public class GameStatus : MonoBehaviour
         }
         if (!_Xturn && !_gameEnded && _againstAI)
         {
-            UpdateBestMoveCell(miniMax.BestMove(boardStatus, player == "X" ? "O" : "X"));
+            Vector2 bestMove = miniMax.BestMove(boardStatus, player == "X" ? "O" : "X");
+            UpdateBestMoveCell(bestMove);
+            moves.Push(bestMove);
+        }
+        moves.Push(clickedCell);
+    }
+    public void Undo()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            Vector2 lastMove = moves.Pop();
+            _cells[(int)lastMove.x, (int)lastMove.y].ClearCell();
         }
     }
     private void UpdateBoardStatus(Vector2 clickedCell, string player)
@@ -144,7 +157,8 @@ public class GameStatus : MonoBehaviour
 
     public void UpdateBestMoveCell(Vector2 bestMove)
     {
-        _cells[(int)bestMove.x, (int)bestMove.y].UpdateCellStatus();
+        _cells[(int)bestMove.x, (int)bestMove.y].UpdateCellStatus(Xturn ? "X" : "O");
+        UpdateGameStatus(bestMove, Xturn ? "X" : "O");
     }
 
     public void Hint()

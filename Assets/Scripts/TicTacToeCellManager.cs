@@ -24,29 +24,18 @@ public class TicTacToeCellManager : MonoBehaviour
     {
         if (gameStatus.Xturn || !gameStatus.againstAI)
         {
-            UpdateCellStatus();
+            UpdateCellStatus(gameStatus.Xturn ? "X" : "O");
+            gameStatus.UpdateGameStatus(_cellLocationOnGrid, gameStatus.Xturn ? "X" : "O");
         }
     }
-    public void UpdateCellStatus()
+    public void UpdateCellStatus(string player)
     {
-        string player;
-
         if (cellEmpty && !gameStatus.gameEnded)
         {
-            if (gameStatus.Xturn)
-            {
-                cellImage.sprite = imageX;
-                player = "X";
-            }
-            else
-            {
-                cellImage.sprite = imageO;
-                player = "O";
-            }
+            cellImage.sprite = player == "X" ? imageX : imageO;
             cellImage.color = new Color(255, 255, 255, 255);
-            gameStatus.UpdateGameStatus(_cellLocationOnGrid, player);
+            cellEmpty = false;
         }
-        cellEmpty = false;
     }
     public void ClearCell()
     {
