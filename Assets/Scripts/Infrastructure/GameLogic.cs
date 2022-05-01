@@ -1,24 +1,17 @@
 ﻿using System.Collections.Generic;
-
 public class GameLogic
 {
-    private readonly Stack<Coordinate> moves = new Stack<Coordinate>();
+    private readonly static Stack<Coordinate> moves = new Stack<Coordinate>();
     private PawnType whosTurn = PawnType.X;
-    public PawnType[,] Board { get; private set; } = new PawnType[3, 3];
-    public GameState GameState { get; private set; } = GameState.Waiting;
+    public PawnType[,] board { get; private set; } = new PawnType[3, 3];
+    public GameState gameState { get; private set; } = GameState.Running;
     public void ConcludeTurn(Coordinate chosenCell)
     {
-        GameState = GameState.Running;
         SetCell(chosenCell, whosTurn);
-        ChangeTurn();
-        GameState = MiniMax.CheckForWinner(Board);
-        if (EnumUtils.IsGameEnded(GameState))
+        gameState = MiniMax.CheckForWinner(board);
+        if (EnumUtils.IsGameEnded(gameState))
         {
             //game end stuff
-        }
-        else
-        {
-            //maybeAI;
         }
         moves.Push(chosenCell);
     }
@@ -32,32 +25,31 @@ public class GameLogic
             return;
         for (int i = 0; i < 2; i++)
         {
-            Coordinate lastMove = moves.Pop();
-            Board[lastMove.C, lastMove.R] = PawnType.None;
+            SetCell(moves.Pop(), PawnType.None);
         }
     }
     private void SetCell(Coordinate pos, PawnType pawn)
     {
-        Board[pos.C, pos.R] = pawn;
+        board[pos.R, pos.C] = pawn;
     }
 
     public void RestartGame()
     {
-        GameState = GameState.Waiting;
+        gameState = GameState.Waiting;
         whosTurn = PawnType.X;
         moves.Clear();
-        for (int c = 0; c < 3; c++)
+        for (int r = 0; r < 3; r++)
         {
-            for (int r = 0; r < 3; r++)
+            for (int c = 0; c < 3; c++)
             {
-                SetCell(new Coordinate(c, r), PawnType.None);
+                SetCell(new Coordinate(r, c), PawnType.None);
             }
         }
     }
 
     public Coordinate Hint()
     {
-        Coordinate bestMove = MiniMax.BestMove(Board, whosTurn);
+        Coordinate bestMove = MiniMax.BestMove(board, whosTurn);
         return bestMove;
     }
 

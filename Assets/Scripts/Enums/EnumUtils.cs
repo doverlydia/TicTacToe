@@ -6,6 +6,6 @@
     }
     public static bool IsGameEnded(GameState state)
     {
-        return ((state == GameState.WinnerO) || (state == GameState.WinnerO) || (state == GameState.Draw));
+        return ((state == GameState.WinnerO) || (state == GameState.WinnerX) || (state == GameState.Draw));
     }
 }

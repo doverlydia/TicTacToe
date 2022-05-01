@@ -9,7 +9,25 @@ namespace Tests
         {
             GameLogic gameLogic = new GameLogic();
 
-            //Assert.AreEqual(, gameLogic.Hint());
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(gameLogic.Hint());
+
+            Assert.AreEqual(GameState.Draw, gameLogic.gameState);
         }
     }
 }

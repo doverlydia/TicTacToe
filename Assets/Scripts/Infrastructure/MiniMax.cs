@@ -6,19 +6,19 @@ public static class MiniMax
     {
         int bestScore = int.MinValue;
         Coordinate bestMove = Coordinate.Zero;
-        for (int c = 0; c < 3; c++)
+        for (int r = 0; r < 3; r++)
         {
-            for (int r = 0; r < 3; r++)
+            for (int c = 0; c < 3; c++)
             {
-                if (board[c, r] == PawnType.None)
+                if (board[r, c] == PawnType.None)
                 {
-                    board[c, r] = bestMoveForWho;
-                    int score = MiniMaxer(board, false, bestMoveForWho);
-                    board[c, r] = PawnType.None;
+                    board[r, c] = bestMoveForWho;
+                    int score = MiniMaxer(board, false, bestMoveForWho == PawnType.X ? PawnType.O : PawnType.X);
+                    board[r, c] = PawnType.None;
                     if (score > bestScore)
                     {
                         bestScore = score;
-                        bestMove = new Coordinate(c, r);
+                        bestMove = new Coordinate(r, c);
                     }
                 }
             }
@@ -44,15 +44,15 @@ public static class MiniMax
         }
 
         int bestScore = isMaximizing ? int.MinValue : int.MaxValue;
-        for (int c = 0; c < 3; c++)
+        for (int r = 0; r < 3; r++)
         {
-            for (int r = 0; r < 3; r++)
+            for (int c = 0; c < 3; c++)
             {
-                if (board[c, r] == PawnType.None)
+                if (board[r, c] == PawnType.None)
                 {
-                    board[c, r] = isMaximizing ? pawnType : otherPlayer;
+                    board[r, c] = isMaximizing ? pawnType : otherPlayer;
                     int score = MiniMaxer(board, !isMaximizing, pawnType);
-                    board[c, r] = PawnType.None;
+                    board[r, c] = PawnType.None;
                     bestScore = isMaximizing ? Math.Max(bestScore, score) : Math.Min(bestScore, score);
                 }
             }

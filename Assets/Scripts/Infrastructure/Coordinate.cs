@@ -1,24 +1,24 @@
 ﻿public struct Coordinate
 {
-    public int C { get; set; }
     public int R { get; set; }
+    public int C { get; set; }
 
     public static Coordinate Zero => new Coordinate(0, 0);
     public static Coordinate One => new Coordinate(1, 1);
 
-    public Coordinate(int c, int r)
+    public Coordinate(int r, int c)
     {
-        this.C = c;
         this.R = r;
+        this.C = c;
     }
     public Coordinate(Coordinate coordinate)
     {
-        this.C = coordinate.C;
         this.R = coordinate.R;
+        this.C = coordinate.C;
     }
 
     public override string ToString()
     {
-        return $"(C: {C}, R: {R})";
+        return $"(R: {R}, C: {C})";
     }
 }
