@@ -8,8 +8,18 @@ public class GameLogic
     public GameState GameState { get; private set; } = GameState.Waiting;
     public void ConcludeTurn(Coordinate chosenCell)
     {
+        GameState = GameState.Running;
         SetCell(chosenCell, whosTurn);
+        ChangeTurn();
         GameState = MiniMax.CheckForWinner(Board);
+        if (EnumUtils.IsGameEnded(GameState))
+        {
+            //game end stuff
+        }
+        else
+        {
+            //maybeAI;
+        }
         moves.Push(chosenCell);
     }
     public void ChangeTurn()
@@ -23,12 +33,12 @@ public class GameLogic
         for (int i = 0; i < 2; i++)
         {
             Coordinate lastMove = moves.Pop();
-            Board[lastMove.R, lastMove.C] = PawnType.None;
+            Board[lastMove.C, lastMove.R] = PawnType.None;
         }
     }
     private void SetCell(Coordinate pos, PawnType pawn)
     {
-        Board[pos.R, pos.C] = pawn;
+        Board[pos.C, pos.R] = pawn;
     }
 
     public void RestartGame()
@@ -36,11 +46,11 @@ public class GameLogic
         GameState = GameState.Waiting;
         whosTurn = PawnType.X;
         moves.Clear();
-        for (int r = 0; r < 3; r++)
+        for (int c = 0; c < 3; c++)
         {
-            for (int c = 0; c < 3; c++)
+            for (int r = 0; r < 3; r++)
             {
-                SetCell(new Coordinate(r, c), PawnType.None);
+                SetCell(new Coordinate(c, r), PawnType.None);
             }
         }
     }
