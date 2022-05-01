@@ -7,12 +7,16 @@ namespace Tests
         [Test]
         public void TestHintHappyFlow()
         {
-            PawnType[,] board = new PawnType[3, 3] {{PawnType.X, PawnType.None, PawnType.O},
-                                                    {PawnType.X, PawnType.None, PawnType.O},
-                                                    {PawnType.None, PawnType.None, PawnType.None}};
-
-            BoardPos hint = MiniMax.BestMove(board, PawnType.O);
-            Assert.AreEqual(new BoardPos(2, 2), hint);
+            GameLogic gameLogic = new GameLogic();
+            gameLogic.ConcludeTurn(Coordinate.Zero);
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(new Coordinate(0,2));
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(new Coordinate(0,1));
+            gameLogic.ChangeTurn();
+            gameLogic.ConcludeTurn(new Coordinate(2,1));
+            gameLogic.ChangeTurn();
+            Assert.AreEqual(new Coordinate(0, 2), gameLogic.Hint());
         }
     }
 }

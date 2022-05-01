@@ -1,24 +1,24 @@
-﻿using System.Linq;
-using System;
+﻿using System;
+using System.Linq;
 public static class MiniMax
 {
-    public static BoardPos BestMove(PawnType[,] board, PawnType pawn)
+    public static Coordinate BestMove(PawnType[,] board, PawnType bestMoveForWho)
     {
         int bestScore = int.MinValue;
-        BoardPos bestMove = new BoardPos(0, 0);
+        Coordinate bestMove = Coordinate.Zero;
         for (int r = 0; r < 3; r++)
         {
             for (int c = 0; c < 3; c++)
             {
                 if (board[r, c] == PawnType.None)
                 {
-                    board[r, c] = pawn;
-                    int score = GetMiniMaxScore(board, false, pawn);
+                    board[r, c] = bestMoveForWho;
+                    int score = MiniMaxer(board, false, bestMoveForWho);
                     board[r, c] = PawnType.None;
                     if (score > bestScore)
                     {
                         bestScore = score;
-                        bestMove = new BoardPos(r, c);
+                        bestMove = new Coordinate(r, c);
                     }
                 }
             }
@@ -26,10 +26,10 @@ public static class MiniMax
         return bestMove;
     }
 
-    private static int GetMiniMaxScore(PawnType[,] board, bool isMaximizing, PawnType pawn)
+    private static int MiniMaxer(PawnType[,] board, bool isMaximizing, PawnType pawnType)
     {
         GameState result = CheckForWinner(board);
-        PawnType otherPlayer = pawn == PawnType.X ? PawnType.O : PawnType.X;
+        PawnType otherPlayer = pawnType == PawnType.O ? PawnType.X : PawnType.O;
         if (EnumUtils.IsGameEnded(result))
         {
             switch (result)
@@ -37,9 +37,9 @@ public static class MiniMax
                 case GameState.Draw:
                     return 0;
                 case GameState.WinnerX:
-                    return PawnType.X == pawn ? 10 : -10;
+                    return pawnType == PawnType.X ? 10 : -10;
                 case GameState.WinnerO:
-                    return PawnType.O == pawn ? 10 : -10;
+                    return pawnType == PawnType.O ? 10 : -10;
             }
         }
 
@@ -50,8 +50,8 @@ public static class MiniMax
             {
                 if (board[r, c] == PawnType.None)
                 {
-                    board[r, c] = isMaximizing ? pawn : otherPlayer;
-                    int score = GetMiniMaxScore(board, !isMaximizing, pawn);
+                    board[r, c] = isMaximizing ? pawnType : otherPlayer;
+                    int score = MiniMaxer(board, !isMaximizing, pawnType);
                     board[r, c] = PawnType.None;
                     bestScore = isMaximizing ? Math.Max(bestScore, score) : Math.Min(bestScore, score);
                 }
@@ -60,30 +60,36 @@ public static class MiniMax
         return bestScore;
     }
 
-    public static GameState CheckForWinner(PawnType[,] board)
+    public static GameState CheckForWinner(PawnType[,] boardStatus)
     {
-        GameState state = GameState.Running;
-
-        for (int r = 0; r < 3; r++)
+        PawnType winner = PawnType.None;
+        for (int i = 0; i < 3; i++)
         {
-            if (EnumUtils.ThreeEqualPawns(board[r, 0], board[r, 1], board[r, 2]))
-                state = board[r, 0] == PawnType.X ? GameState.WinnerX : GameState.WinnerO;
-
-            if (EnumUtils.ThreeEqualPawns(board[0, r], board[1, r], board[2, r]))
-                state = board[0, r] == PawnType.X ? GameState.WinnerX : GameState.WinnerO;
+            if (EnumUtils.ThreeEqualPawns(boardStatus[i, 0], boardStatus[i, 1], boardStatus[i, 2]))
+            {
+                winner = boardStatus[i, 0];
+            }
+            if (EnumUtils.ThreeEqualPawns(boardStatus[0, i], boardStatus[1, i], boardStatus[2, i]))
+            {
+                winner = boardStatus[0, i];
+            }
         }
-
-        if (EnumUtils.ThreeEqualPawns(board[0, 0], board[1, 1], board[2, 2]) ||
-            EnumUtils.ThreeEqualPawns(board[0, 2], board[1, 1], board[2, 0]))
+        if (EnumUtils.ThreeEqualPawns(boardStatus[0, 0], boardStatus[1, 1], boardStatus[2, 2])
+            || EnumUtils.ThreeEqualPawns(boardStatus[0, 2], boardStatus[1, 1], boardStatus[2, 0]))
         {
-            state = board[1, 1] == PawnType.X ? GameState.WinnerX : GameState.WinnerO;
+            winner = boardStatus[1, 1];
         }
-
-        if (state == GameState.Running && !board.OfType<PawnType>().Any(x => x == PawnType.None))
+        if (winner != PawnType.None)
         {
-            state = GameState.Draw;
+            return winner == PawnType.X ? GameState.WinnerX : GameState.WinnerO;
         }
-
-        return state;
+        else if (!boardStatus.OfType<PawnType>().Any(x => x == PawnType.None) && winner == PawnType.None)
+        {
+            return GameState.Draw;
+        }
+        else
+        {
+            return GameState.Running;
+        }
     }
 }

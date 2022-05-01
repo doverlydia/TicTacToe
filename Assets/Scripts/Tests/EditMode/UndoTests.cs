@@ -8,11 +8,11 @@ namespace Tests
         public void TestUndoHappyFlow()
         {
             GameLogic gameLogic = new GameLogic();
-            gameLogic.ConcludeTurn(new BoardPos(1, 1));
-            gameLogic.ConcludeTurn(new BoardPos(2, 1));
+            gameLogic.ConcludeTurn(Coordinate.One);
+            gameLogic.ConcludeTurn(new Coordinate(2, 1));
             gameLogic.Undo();
-            Assert.AreEqual(gameLogic.board[1, 1], PawnType.None);
-            Assert.AreEqual(gameLogic.board[2, 1], PawnType.None);
+            Assert.AreEqual(gameLogic.Board[1, 1], PawnType.None);
+            Assert.AreEqual(gameLogic.Board[2, 1], PawnType.None);
         }
         [Test]
         public void TestUndoNoMoves()
