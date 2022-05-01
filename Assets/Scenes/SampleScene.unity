@@ -1544,9 +1544,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81f3b640bbf0b4d4894944cc5fcc9842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ximage: {fileID: 21300000, guid: 5e8278e012ff04d9a8bbd92350645568, type: 3}
-  Oimage: {fileID: 21300000, guid: bd30ced15dd1c4a81a8798331e1abe4a, type: 3}
-  turnImage: {fileID: 1823294868}
 --- !u!1 &2058302761
 GameObject:
   m_ObjectHideFlags: 0
