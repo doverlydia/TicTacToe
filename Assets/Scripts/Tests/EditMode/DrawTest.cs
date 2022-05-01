@@ -2,16 +2,16 @@
 
 namespace Tests
 {
-    public class HintTests
+    public class DrawTests
     {
         [Test]
-        public void TestHintHappyFlow()
+        public void TestDrawHappyFlow()
         {
             GameLogic gameLogic = new GameLogic();
 
             for (int i = 0; i < 9; i++)
             {
-                gameLogic.ConcludeTurn(gameLogic.Hint()); //hint is based on the "MiniMax" algorithm. if hint works correctly i sould always end in a draw.
+                gameLogic.ConcludeTurn(gameLogic.Hint()); //always using the "MiniMax" algorithm which means always ending in a draw
                 gameLogic.ChangeTurn();
             }
 

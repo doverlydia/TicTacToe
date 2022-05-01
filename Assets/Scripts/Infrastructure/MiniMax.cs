@@ -13,7 +13,7 @@ public static class MiniMax
                 if (board[r, c] == PawnType.None)
                 {
                     board[r, c] = bestMoveForWho;
-                    int score = MiniMaxer(board, false, bestMoveForWho == PawnType.X ? PawnType.O : PawnType.X);
+                    int score = MiniMaxer(board, false, bestMoveForWho);
                     board[r, c] = PawnType.None;
                     if (score > bestScore)
                     {
@@ -26,10 +26,10 @@ public static class MiniMax
         return bestMove;
     }
 
-    private static int MiniMaxer(PawnType[,] board, bool isMaximizing, PawnType pawnType)
+    private static int MiniMaxer(PawnType[,] boardStatus, bool isMaximizing, PawnType miniMaxForWho)
     {
-        GameState result = CheckForWinner(board);
-        PawnType otherPlayer = pawnType == PawnType.O ? PawnType.X : PawnType.O;
+        GameState result =CheckForWinner(boardStatus);
+        PawnType otherPlayer = miniMaxForWho == PawnType.O ? PawnType.X: PawnType.O;
         if (EnumUtils.IsGameEnded(result))
         {
             switch (result)
@@ -37,22 +37,22 @@ public static class MiniMax
                 case GameState.Draw:
                     return 0;
                 case GameState.WinnerX:
-                    return pawnType == PawnType.X ? 10 : -10;
+                    return miniMaxForWho == PawnType.X ? 10 : -10;
                 case GameState.WinnerO:
-                    return pawnType == PawnType.O ? 10 : -10;
+                    return miniMaxForWho == PawnType.O ? 10 : -10;
             }
         }
 
         int bestScore = isMaximizing ? int.MinValue : int.MaxValue;
-        for (int r = 0; r < 3; r++)
+        for (int x = 0; x < 3; x++)
         {
-            for (int c = 0; c < 3; c++)
+            for (int y = 0; y < 3; y++)
             {
-                if (board[r, c] == PawnType.None)
+                if (boardStatus[x, y] == PawnType.None)
                 {
-                    board[r, c] = isMaximizing ? pawnType : otherPlayer;
-                    int score = MiniMaxer(board, !isMaximizing, pawnType);
-                    board[r, c] = PawnType.None;
+                    boardStatus[x, y] = isMaximizing ? miniMaxForWho : otherPlayer;
+                    int score = MiniMaxer(boardStatus, !isMaximizing, miniMaxForWho);
+                    boardStatus[x, y] = PawnType.None;
                     bestScore = isMaximizing ? Math.Max(bestScore, score) : Math.Min(bestScore, score);
                 }
             }
