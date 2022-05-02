@@ -9,10 +9,6 @@ public class GameLogic
     {
         SetCell(chosenCell, whosTurn);
         gameState = MiniMax.CheckForWinner(board);
-        if (EnumUtils.IsGameEnded(gameState))
-        {
-            //game end stuff
-        }
         moves.Push(chosenCell);
     }
     public void ChangeTurn()
