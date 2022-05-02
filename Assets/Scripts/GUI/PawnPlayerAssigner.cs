@@ -3,19 +3,18 @@ using UnityEngine.UI;
 
 public class PawnPlayerAssigner : MonoBehaviour
 {
-    public static PawnPlayerAssigner instance { get; private set; }
-
-    private Sprite Ximage;
-    private Sprite Oimage;
+    [SerializeField] private GraphicsStore _store;
+    public GraphicsStore store => _store;
+    public static PawnPlayerAssigner Instance { get; private set; }
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
         }
         else
         {
-            instance = this;
+            Instance = this;
         }
     }
 
