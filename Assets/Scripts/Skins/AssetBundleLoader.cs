@@ -10,7 +10,11 @@ public class AssetBundleLoader : MonoBehaviour
     public void Reskin()
     {
         AssetBundle skin = LoadSkin(skinName.text);
-        if (skin != null)
+        if (skin == null)
+        {
+            Debug.LogError("no such skin");
+        }
+        else
         {
             graphicsStore.SetStore(skin.LoadAsset<Texture2D>(SkinAdressableNames.xSpriteAdressableName),
                                    skin.LoadAsset<Texture2D>(SkinAdressableNames.oSpriteAdressableName),
@@ -27,7 +31,6 @@ public class AssetBundleLoader : MonoBehaviour
             Debug.Log("Failed to load AssetBundle!");
             return null;
         }
-        myLoadedAssetBundle.Unload(false);
         return myLoadedAssetBundle;
     }
 }
