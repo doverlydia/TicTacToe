@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class MainMenu : MonoBehaviour
+public class MainMenuFuncs : MonoBehaviour
 {
     public void LoadScene(int sceneNumber)
     {
