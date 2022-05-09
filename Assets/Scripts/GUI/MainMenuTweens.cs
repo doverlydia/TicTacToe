@@ -1,17 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 public class MainMenuTweens : MonoBehaviour
 {
     [SerializeField] RectTransform logo;
     [SerializeField] RectTransform skinButton;
     [SerializeField] RectTransform playButton;
+    [SerializeField] Image blackScreen;
     private void Awake()
     {
         logo.localScale = Vector2.zero;
         skinButton.localScale = Vector2.zero;
         playButton.localScale = Vector2.zero;
+        blackScreen.canvasRenderer.SetAlpha(0);
     }
     private void Start()
     {
@@ -54,5 +57,9 @@ public class MainMenuTweens : MonoBehaviour
         {
             rectTrans.gameObject.SetActive(false);
         });
+    }
+    public void FadeBlackScreen(float value)
+    {
+        blackScreen.CrossFadeAlpha(value, 0.2f, false);
     }
 }

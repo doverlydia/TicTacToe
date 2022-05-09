@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 2373881225
+    locked: 0
+  - name: Particles
+    uniqueID: 2112856753
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
