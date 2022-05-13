@@ -2,9 +2,48 @@
 [CreateAssetMenu(fileName = "GraphicsStore", menuName = "ScriptableObjects/GraphicStore", order = 1)]
 public class GraphicsStore : ScriptableObject
 {
-    public Sprite XSprite { get; private set; }
-    public Sprite Osprite { get; private set; }
-    public Sprite BGsprite { get; private set; }
+
+    private Sprite _xSprite;
+    private Sprite _oSprite;
+    private Sprite _bgSprite;
+
+    [SerializeField] private Sprite defaultXSprite;
+    [SerializeField] private Sprite defaultOsprite;
+    [SerializeField] private Sprite defaultBGsprite;
+
+    public Sprite XSprite
+    {
+        get
+        {
+            return _xSprite == null ? defaultXSprite : _xSprite;
+        }
+        private set
+        {
+            _xSprite = value;
+        }
+    }
+    public Sprite Osprite
+    {
+        get
+        {
+            return _oSprite == null ? defaultOsprite : _oSprite;
+        }
+        private set
+        {
+            _oSprite = value;
+        }
+    }
+    public Sprite BGsprite
+    {
+        get
+        {
+            return _bgSprite == null ? defaultBGsprite : _bgSprite;
+        }
+        private set
+        {
+            _bgSprite = value;
+        }
+    }
 
     public void SetStore(Texture2D xSprite, Texture2D oSprite, Texture2D bgSprite)
     {

@@ -2,18 +2,18 @@
 public class GameLogic
 {
     private readonly static Stack<Coordinate> moves = new Stack<Coordinate>();
-    private PawnType whosTurn = PawnType.X;
-    public PawnType[,] board { get; private set; } = new PawnType[3, 3];
-    public GameState gameState { get; private set; } = GameState.Running;
+    public PawnType WhosTurn { get; private set; } = PawnType.X;
+    public PawnType[,] Board { get; private set; } = new PawnType[3, 3];
+    public GameState GameState { get; private set; } = GameState.Running;
     public void ConcludeTurn(Coordinate chosenCell)
     {
-        SetCell(chosenCell, whosTurn);
-        gameState = MiniMax.CheckForWinner(board);
+        SetCell(chosenCell, WhosTurn);
+        GameState = MiniMax.CheckForWinner(Board);
         moves.Push(chosenCell);
     }
     public void ChangeTurn()
     {
-        whosTurn = whosTurn == PawnType.X ? PawnType.O : PawnType.X;
+        WhosTurn = WhosTurn == PawnType.X ? PawnType.O : PawnType.X;
     }
     public void Undo()
     {
@@ -26,13 +26,13 @@ public class GameLogic
     }
     private void SetCell(Coordinate pos, PawnType pawn)
     {
-        board[pos.R, pos.C] = pawn;
+        Board[pos.R, pos.C] = pawn;
     }
 
     public void RestartGame()
     {
-        gameState = GameState.Waiting;
-        whosTurn = PawnType.X;
+        GameState = GameState.Waiting;
+        WhosTurn = PawnType.X;
         moves.Clear();
         for (int r = 0; r < 3; r++)
         {
@@ -45,7 +45,7 @@ public class GameLogic
 
     public Coordinate Hint()
     {
-        Coordinate bestMove = MiniMax.BestMove(board, whosTurn);
+        Coordinate bestMove = MiniMax.BestMove(Board, WhosTurn);
         return bestMove;
     }
 

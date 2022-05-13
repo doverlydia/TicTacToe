@@ -15,7 +15,7 @@ namespace Tests
                 gameLogic.ChangeTurn();
             }
 
-            Assert.AreEqual(GameState.Draw, gameLogic.gameState);
+            Assert.AreEqual(GameState.Draw, gameLogic.GameState);
         }
     }
 }

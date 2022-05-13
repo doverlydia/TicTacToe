@@ -14,7 +14,7 @@ namespace Tests
                 gameLogic.ConcludeTurn(new Coordinate(i,0)); //placing adjacent X's=> X win
             }
 
-            Assert.AreEqual(GameState.WinnerX, gameLogic.gameState);
+            Assert.AreEqual(GameState.WinnerX, gameLogic.GameState);
         }
     }
 }

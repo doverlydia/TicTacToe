@@ -7,14 +7,14 @@ public class MainMenuTweens : MonoBehaviour
 {
     [SerializeField] RectTransform logo;
     [SerializeField] RectTransform skinButton;
+    [SerializeField] RectTransform modButton;
     [SerializeField] RectTransform playButton;
-    [SerializeField] Image blackScreen;
     private void Awake()
     {
         logo.localScale = Vector2.zero;
         skinButton.localScale = Vector2.zero;
+        modButton.localScale = Vector2.zero;
         playButton.localScale = Vector2.zero;
-        blackScreen.canvasRenderer.SetAlpha(0);
     }
     private void Start()
     {
@@ -30,7 +30,8 @@ public class MainMenuTweens : MonoBehaviour
                  StartCoroutine(SineRotationLoop(logo, 3));
              })
             .Insert(0.5f, skinButton.DOScale(1, 1.5f).SetEase(Ease.OutElastic))
-            .Insert(1, playButton.DOScale(1, 1.5f).SetEase(Ease.OutElastic));
+            .Insert(1f, modButton.DOScale(1, 1.5f).SetEase(Ease.OutElastic))
+            .Insert(1.5f, playButton.DOScale(1, 1.5f).SetEase(Ease.OutElastic));
     }
 
     IEnumerator SineRotationLoop(RectTransform rectTrans, int strength)
@@ -43,23 +44,5 @@ public class MainMenuTweens : MonoBehaviour
             rectTrans.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             yield return null;
         }
-    }
-
-    public void PopIn(RectTransform rectTrans)
-    {
-        rectTrans.gameObject.SetActive(true);
-        rectTrans.localScale = Vector3.zero;
-        rectTrans.DOScale(1, 0.2f).SetEase(Ease.OutSine);
-    }
-    public void PopOut(RectTransform rectTrans)
-    {
-        rectTrans.DOScale(0, 0.2f).SetEase(Ease.InSine).OnComplete(() =>
-        {
-            rectTrans.gameObject.SetActive(false);
-        });
-    }
-    public void FadeBlackScreen(float value)
-    {
-        blackScreen.CrossFadeAlpha(value, 0.2f, false);
     }
 }
