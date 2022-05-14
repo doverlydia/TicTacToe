@@ -2,21 +2,21 @@
 using TMPro;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 public class AssetBundleLoader : MonoBehaviour
 {
     [SerializeField] GraphicsStore graphicsStore;
-    [SerializeField] TMP_InputField skinName;
     [SerializeField] TMP_Text feedback;
+    [SerializeField] TMP_Dropdown dropdown;
     private void OnEnable()
     {
         feedback.text = "";
-        skinName.text = "";
-        GetNames();
+        CreateBundlesDropDownSelector();
     }
     public void Reskin()
     {
-        AssetBundle skin = LoadSkin(skinName.text);
+        AssetBundle skin = LoadSkin();
         if (skin == null)
         {
             feedback.text = "There is no such skin.";
@@ -31,8 +31,9 @@ public class AssetBundleLoader : MonoBehaviour
         }
     }
 
-    private AssetBundle LoadSkin(string skinName)
+    private AssetBundle LoadSkin()
     {
+        string skinName = GetChosenOption();
         if (File.Exists($"{Application.streamingAssetsPath}/{skinName}"))
         {
             AssetBundle myLoadedAssetBundle = AssetBundle.LoadFromFile($"{Application.streamingAssetsPath}/{skinName}");
@@ -52,9 +53,23 @@ public class AssetBundleLoader : MonoBehaviour
 
         foreach (FileInfo f in info)
         {
-            bundleNames.Add(Path.GetFileNameWithoutExtension($"{Application.streamingAssetsPath}/{f.Name}"));
+            string name = f.Name.Split('.')[0];
+            if (name != "StreamingAssets")
+                bundleNames.Add(name);
         }
 
         return bundleNames;
+    }
+
+    private void CreateBundlesDropDownSelector()
+    {
+        HashSet<string> bundleNames = GetNames();
+        dropdown.ClearOptions();
+        dropdown.AddOptions(bundleNames.ToList());
+    }
+
+    private string GetChosenOption()
+    {
+        return dropdown.options[dropdown.value].text;
     }
 }
