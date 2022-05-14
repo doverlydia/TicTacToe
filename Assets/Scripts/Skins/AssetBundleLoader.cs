@@ -6,13 +6,18 @@ using System.Linq;
 
 public class AssetBundleLoader : MonoBehaviour
 {
-    [SerializeField] GraphicsStore graphicsStore;
-    [SerializeField] TMP_Text feedback;
-    [SerializeField] TMP_Dropdown dropdown;
+    [SerializeField] private GraphicsStore graphicsStore;
+    [SerializeField] private TMP_Text feedback;
+    [SerializeField] private TMP_Dropdown dropdown;
+    [SerializeField] private TMP_InputField inputField;
+
+    private List<TMP_Dropdown.OptionData> dropdownOptions;
+
     private void OnEnable()
     {
         feedback.text = "";
         CreateBundlesDropDownSelector();
+        dropdownOptions = dropdown.options;
     }
     public void Reskin()
     {
@@ -71,5 +76,10 @@ public class AssetBundleLoader : MonoBehaviour
     private string GetChosenOption()
     {
         return dropdown.options[dropdown.value].text;
+    }
+
+    public void FilterDropDown()
+    {
+        dropdown.options = dropdownOptions.FindAll(option => option.text.Contains(inputField.text));
     }
 }
