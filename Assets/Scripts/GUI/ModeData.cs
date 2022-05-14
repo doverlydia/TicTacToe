@@ -23,4 +23,17 @@ public class ModeData : ScriptableObject
         this.Player1Name = player1Name;
         this.Player2Name = player2Name;
     }
+    public void RandomAsignPlayers()
+    {
+        string player1 = Player1Name;
+        string player2 = Player2Name;
+
+        int rnd = Random.Range(0, 2);
+
+        if (rnd == 1)
+        {
+            Player1Name = player2;
+            Player2Name = player1;
+        }
+    }
 }

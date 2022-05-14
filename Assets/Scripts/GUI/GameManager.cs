@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System;
-
+using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private TMP_Text countdownText;
     private readonly Button[,] board = new Button[3, 3];
-
     private readonly GameLogic gameLogic = new GameLogic();
+    private bool isAIturn;
 
     private void Awake()
     {
@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         gameLogic.RestartGame();
+        modeData.RandomAsignPlayers();
         UpdateBoard();
         UpdateWhosTurn();
         StopAllCoroutines();
@@ -65,7 +66,25 @@ public class GameManager : MonoBehaviour
 
     public void Hint()
     {
-        Debug.Log(gameLogic.Hint());
+        StartCoroutine(ShowHint());
+    }
+
+    IEnumerator ShowHint()
+    {
+        Coordinate hintCord = gameLogic.Hint();
+        if (!EnumUtils.IsGameEnded(gameLogic.GameState) && !isAIturn && !DOTween.IsTweening(board[hintCord.R, hintCord.C].transform))
+        {
+            print("hellooooooo");
+            board[hintCord.R, hintCord.C].image.sprite = gameLogic.WhosTurn == PawnType.X ? store.XSprite : store.Osprite;
+            board[hintCord.R, hintCord.C].image.color = Color.white;
+
+            board[hintCord.R, hintCord.C].transform.DOShakeRotation(1);
+
+            yield return new WaitForSeconds(1);
+
+            board[hintCord.R, hintCord.C].image.color = Color.clear;
+            board[hintCord.R, hintCord.C].image.sprite = null;
+        }
     }
 
     public void Undo()
@@ -199,6 +218,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator AI_Turn()
     {
+        isAIturn = true;
         SetBoardInteractive(false);
         yield return new WaitForSeconds(1);
         if (!EnumUtils.IsGameEnded(gameLogic.GameState))
@@ -211,6 +231,7 @@ public class GameManager : MonoBehaviour
             if (!IsGameEnded(gameLogic.GameState))
                 SetBoardInteractive(true);
         }
+        isAIturn = false;
     }
 
     public void SetCellInteractive(Coordinate coordinate, bool isInteractive)
