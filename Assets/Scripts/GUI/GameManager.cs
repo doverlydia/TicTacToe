@@ -17,8 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PopUpUtils gameEndPopUp;
     [SerializeField] private TMP_Text feedback;
     [SerializeField] private TMP_Text whosTurn;
-    [SerializeField] private GameObject hintButton;
-    [SerializeField] private GameObject undoButton;
+    [SerializeField] private Button hintButton;
+    [SerializeField] private Button undoButton;
+    [SerializeField] private Button restartButton;
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private TMP_Text countdownText;
     private readonly Button[,] board = new Button[3, 3];
@@ -38,8 +39,8 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        hintButton.SetActive(modeData.GameMode == GameMode.playerVScomputer);
-        undoButton.SetActive(modeData.GameMode == GameMode.playerVScomputer);
+        hintButton.gameObject.SetActive(modeData.GameMode == GameMode.playerVScomputer);
+        undoButton.gameObject.SetActive(modeData.GameMode == GameMode.playerVScomputer);
         CreateBoard();
         if (modeData.GameMode != GameMode.computerVScomputer)
         {
@@ -167,6 +168,10 @@ public class GameManager : MonoBehaviour
     private void OnGameEnded(GameState state)
     {
         blackScreen.FadeBlackScreen(0.95f);
+        SetBoardInteractive(false);
+        hintButton.interactable = false;
+        restartButton.interactable = false;
+        undoButton.interactable = false;
         switch (state)
         {
             case (GameState.Draw):
@@ -187,7 +192,6 @@ public class GameManager : MonoBehaviour
         if (EnumUtils.IsGameEnded(state))
         {
             OnGameEnded(state);
-            SetBoardInteractive(false);
             return true;
         }
         return false;

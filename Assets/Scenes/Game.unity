@@ -2462,8 +2462,9 @@ MonoBehaviour:
   gameEndPopUp: {fileID: 6027289272829452478}
   feedback: {fileID: 1373592985}
   whosTurn: {fileID: 1836891031}
-  hintButton: {fileID: 2058302761}
-  undoButton: {fileID: 261908485}
+  hintButton: {fileID: 2058302763}
+  undoButton: {fileID: 261908487}
+  restartButton: {fileID: 1137963556}
   timerText: {fileID: 453717668}
   countdownText: {fileID: 1478906369}
 --- !u!1 &1836891029
