@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,7 +12,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ModeData modeData;
     [SerializeField] private GraphicsStore store;
     [SerializeField] private GameObject cellPrefab;
-    [SerializeField] private GameObject linePrefab;
     [SerializeField] private Transform gameGrid;
     [SerializeField] private Image bg;
     [SerializeField] private PopUpUtils gameEndPopUp;
@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text whosTurn;
     [SerializeField] private GameObject hintButton;
     [SerializeField] private GameObject undoButton;
+    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private TMP_Text countdownText;
     private readonly Button[,] board = new Button[3, 3];
 
     private readonly GameLogic gameLogic = new GameLogic();
@@ -47,6 +49,8 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(AIvsAI());
         }
+
+        StartCoroutine(CountDown(3, () => StartCoroutine(TurnTimer(5))));
     }
 
     public void RestartGame()
@@ -54,6 +58,8 @@ public class GameManager : MonoBehaviour
         gameLogic.RestartGame();
         UpdateBoard();
         UpdateWhosTurn();
+        StopAllCoroutines();
+        StartCoroutine(TurnTimer(5));
     }
 
     public void Hint()
@@ -86,7 +92,8 @@ public class GameManager : MonoBehaviour
                     board[r, c].onClick.AddListener(() => StartCoroutine(AI_Turn()));
                 }
 
-                board[r, c].onClick.AddListener(() => IsGameEnded());
+                board[r, c].onClick.AddListener(() => IsGameEnded(gameLogic.GameState));
+                board[r, c].onClick.AddListener(() => StartCoroutine(TurnTimer(5)));
             }
         }
 
@@ -107,7 +114,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator AIvsAI()
     {
         SetBoardInteractive(false);
-        while (!IsGameEnded())
+        while (!IsGameEnded(gameLogic.GameState))
         {
             Coordinate AI_move = new Coordinate(gameLogic.Hint());
             gameLogic.ConcludeTurn(AI_move);
@@ -157,10 +164,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnGameEnded()
+    private void OnGameEnded(GameState state)
     {
         blackScreen.FadeBlackScreen(0.95f);
-        switch (gameLogic.GameState)
+        switch (state)
         {
             case (GameState.Draw):
                 feedback.text = "It's A Draw!";
@@ -175,11 +182,11 @@ public class GameManager : MonoBehaviour
         gameEndPopUp.PopIn();
     }
 
-    private bool IsGameEnded()
+    private bool IsGameEnded(GameState state)
     {
-        if (EnumUtils.IsGameEnded(gameLogic.GameState))
+        if (EnumUtils.IsGameEnded(state))
         {
-            OnGameEnded();
+            OnGameEnded(state);
             SetBoardInteractive(false);
             return true;
         }
@@ -197,7 +204,7 @@ public class GameManager : MonoBehaviour
             UpdateCell(AI_move);
             gameLogic.ChangeTurn();
             UpdateWhosTurn();
-            if (!IsGameEnded())
+            if (!IsGameEnded(gameLogic.GameState))
                 SetBoardInteractive(true);
         }
     }
@@ -216,6 +223,51 @@ public class GameManager : MonoBehaviour
                 if (gameLogic.Board[r, c] == PawnType.None)
                     SetCellInteractive(new Coordinate(r, c), isInteractive);
             }
+        }
+    }
+
+    private IEnumerator TurnTimer(int secsPerTurn)
+    {
+        if (!EnumUtils.IsGameEnded(gameLogic.GameState))
+        {
+            PawnType currentTurn = gameLogic.WhosTurn;
+            float timer = secsPerTurn + 1;
+            timerText.text = ((int)timer).ToString();
+            while (currentTurn == gameLogic.WhosTurn)
+            {
+                timer -= Time.deltaTime;
+                timerText.text = ((int)timer).ToString();
+                if (timer <= 0)
+                {
+                    OnGameEnded(currentTurn == PawnType.X ? GameState.WinnerO : GameState.WinnerX);
+                    SetBoardInteractive(false);
+                    break;
+                }
+
+                yield return null;
+            }
+        }
+    }
+
+    private IEnumerator CountDown(int countDown, Action action)
+    {
+        blackScreen.FadeBlackScreen(0.8f);
+        countdownText.gameObject.SetActive(true);
+        float timer = countDown + 1;
+        countdownText.text = ((int)timer).ToString();
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            countdownText.text = ((int)timer).ToString();
+            if (timer <= 0)
+            {
+                blackScreen.FadeBlackScreen(0f);
+                countdownText.gameObject.SetActive(false);
+                action();
+                break;
+            }
+
+            yield return null;
         }
     }
 }

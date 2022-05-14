@@ -48,5 +48,4 @@ public class GameLogic
         Coordinate bestMove = MiniMax.BestMove(Board, WhosTurn);
         return bestMove;
     }
-
 }
