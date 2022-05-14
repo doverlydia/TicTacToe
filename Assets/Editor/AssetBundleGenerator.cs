@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.IO;
 public class AssetBundleGenerator : EditorWindow
 {
     string skinName;
@@ -10,7 +9,9 @@ public class AssetBundleGenerator : EditorWindow
     [MenuItem("AssetBundles/AssetBundleGenerator")]
     public static void ShowWindow()
     {
-        EditorWindow.GetWindow(typeof(AssetBundleGenerator));
+        EditorWindow wnd = EditorWindow.GetWindow(typeof(AssetBundleGenerator));
+        wnd.minSize = new Vector2(450, 300);
+        wnd.maxSize = new Vector2(1920, 720);
     }
 
     private void OnGUI()

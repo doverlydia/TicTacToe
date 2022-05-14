@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.IO;
+using System.Collections.Generic;
 
 public class AssetBundleLoader : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class AssetBundleLoader : MonoBehaviour
     {
         feedback.text = "";
         skinName.text = "";
+        GetNames();
     }
     public void Reskin()
     {
@@ -40,5 +42,19 @@ public class AssetBundleLoader : MonoBehaviour
         {
             return null;
         }
+    }
+
+    private HashSet<string> GetNames()
+    {
+        DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath);
+        FileInfo[] info = dir.GetFiles("*.*");
+        HashSet<string> bundleNames = new HashSet<string>();
+
+        foreach (FileInfo f in info)
+        {
+            bundleNames.Add(Path.GetFileNameWithoutExtension($"{Application.streamingAssetsPath}/{f.Name}"));
+        }
+
+        return bundleNames;
     }
 }
