@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 public static class MiniMax
 {
     private static Dictionary<string, int> cache = new Dictionary<string, int>();
