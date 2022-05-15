@@ -231,6 +231,7 @@ public class GameManager : MonoBehaviour
             UpdateWhosTurn();
             if (!IsGameEnded(gameLogic.GameState))
                 SetBoardInteractive(true);
+            StartCoroutine(TurnTimer(5));
         }
         isAIturn = false;
     }

@@ -14,3 +14,11 @@ Tech Art
 - - - -
 used DG Tweening to make the game jucier (main menu sequence, pop ups, hint).
 used particle sysatem to make the bacground of the game more lively.
+
+Music
+- - - -
+Morning Routine by Ghostrifter Official | https://soundcloud.com/ghostrifter-official
+Music promoted by https://www.chosic.com/free-music/all/
+Creative Commons CC BY-SA 3.0
+https://creativecommons.org/licenses/by-sa/3.0/
+ 
