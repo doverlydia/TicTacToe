@@ -37,7 +37,7 @@ public class SelectMode : MonoBehaviour
 
     public void SetMode()
     {
-        string p1Name = GetGameMode() == GameMode.computerVScomputer ? "Player1_AI" : player2Name.text;
+        string p1Name = GetGameMode() == GameMode.computerVScomputer ? "Player1_AI" : player1Name.text;
         string p2Name = GetGameMode() == GameMode.playerVsplayer ? player2Name.text : "Player2_AI";
         modeData.SetData(GetGameMode(), GetGameDifficulty(), p1Name == "" ? "Player1" : p1Name, p2Name == "" ? "Player2" : p2Name);
     }
