@@ -31,6 +31,21 @@ public static class MiniMax
 
     private static int MiniMaxer(PawnType[,] boardStatus, bool isMaximizing, PawnType miniMaxForWho)
     {
+        /*
+         * The purpose of this function is to figure out what is the best move for the desired pawn typr(X/O) for the current boards state.
+         * ---
+         * the mini max algorithm acts in a recursive manner until reching a final game state.
+         * ---
+         * in every run the algorithm will pick the next available spot in the board and will check the result of playing this spot,
+         * and will return a score for this move accordingly.
+         * ---
+         * to measure our moves in a consistent way the algorithm assumes that the opponent will play in the worst way possible
+         * (looking for the max points for the desired pawn while min points for the opponent).
+         * ---
+         * i chose the sacrifice a bit of storage in favor of optimizing time complexity.
+         * since from the first hint request (or ai move) minimaxer already goes over every possible outcome, I cache the score for the relative board state.
+         */
+
         Dictionary<string, object> dictForCacheKey = new Dictionary<string, object>();
         dictForCacheKey["boardStatus"] = boardStatus;
         dictForCacheKey["whosTurn"] = miniMaxForWho;

@@ -2,8 +2,10 @@
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using DG.Tweening;
+using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -140,7 +142,7 @@ public class GameManager : MonoBehaviour
             UpdateCell(AI_move);
             gameLogic.ChangeTurn();
             UpdateWhosTurn();
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1); // make it feel more human!
         }
     }
 
@@ -219,10 +221,10 @@ public class GameManager : MonoBehaviour
     {
         isAIturn = true;
         SetBoardInteractive(false);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1); // Make it feel more human!
         if (!EnumUtils.IsGameEnded(gameLogic.GameState))
         {
-            Coordinate AI_move = new Coordinate(gameLogic.Hint());
+            Coordinate AI_move = AiMoveByDifficulty(modeData.difficulty);
             gameLogic.ConcludeTurn(AI_move);
             UpdateCell(AI_move);
             gameLogic.ChangeTurn();
@@ -232,6 +234,21 @@ public class GameManager : MonoBehaviour
         }
         isAIturn = false;
     }
+
+    private Coordinate AiMoveByDifficulty(GameDifficulty difficulty)
+    {
+        switch (difficulty)
+        {
+            case GameDifficulty.easy:
+                return gameLogic.GetRandomEmptyPos();
+            case GameDifficulty.hard:
+                return gameLogic.Hint();
+            default:
+                int chanceForMinimax = UnityEngine.Random.Range(0, 2);
+                return chanceForMinimax == 0 ? gameLogic.Hint() : gameLogic.GetRandomEmptyPos();
+        }
+    }
+
 
     public void SetCellInteractive(Coordinate coordinate, bool isInteractive)
     {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 public class GameLogic
 {
     private readonly static Stack<Coordinate> moves = new Stack<Coordinate>();
@@ -47,5 +48,20 @@ public class GameLogic
     {
         Coordinate bestMove = MiniMax.BestMove(Board, WhosTurn);
         return bestMove;
+    }
+
+    public Coordinate GetRandomEmptyPos()
+    {
+        List<Coordinate> emptyCells = new List<Coordinate>();
+        for (int r = 0; r < 3; r++)
+        {
+            for (int c = 0; c < 3; c++)
+            {
+                if (Board[r, c] == PawnType.None)
+                    emptyCells.Add(new Coordinate(r, c));
+            }
+        }
+
+        return emptyCells[Random.Range(0, emptyCells.Count)];
     }
 }

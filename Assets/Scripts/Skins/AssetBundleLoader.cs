@@ -53,7 +53,7 @@ public class AssetBundleLoader : MonoBehaviour
     private HashSet<string> GetNames()
     {
         DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath);
-        FileInfo[] info = dir.GetFiles("*.*");
+        FileInfo[] info = dir.GetFiles("*");
         HashSet<string> bundleNames = new HashSet<string>();
 
         foreach (FileInfo f in info)
