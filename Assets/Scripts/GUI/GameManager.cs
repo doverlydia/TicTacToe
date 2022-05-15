@@ -45,13 +45,13 @@ public class GameManager : MonoBehaviour
         if (modeData.GameMode != GameMode.computerVScomputer)
         {
             InitBoard();
+            StartCoroutine(CountDown(3, () => StartCoroutine(TurnTimer(5))));
         }
         else
         {
-            StartCoroutine(AIvsAI());
+            StartCoroutine(CountDown(3, () => StartCoroutine(AIvsAI())));
         }
 
-        StartCoroutine(CountDown(3, () => StartCoroutine(TurnTimer(5))));
     }
 
     public void RestartGame()
@@ -74,7 +74,6 @@ public class GameManager : MonoBehaviour
         Coordinate hintCord = gameLogic.Hint();
         if (!EnumUtils.IsGameEnded(gameLogic.GameState) && !isAIturn && !DOTween.IsTweening(board[hintCord.R, hintCord.C].transform))
         {
-            print("hellooooooo");
             board[hintCord.R, hintCord.C].image.sprite = gameLogic.WhosTurn == PawnType.X ? store.XSprite : store.Osprite;
             board[hintCord.R, hintCord.C].image.color = Color.white;
 
