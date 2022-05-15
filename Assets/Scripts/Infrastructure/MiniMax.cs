@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Unity.Plastic.Newtonsoft.Json;
 public static class MiniMax
 {
+    private static Dictionary<string, int> cache = new Dictionary<string, int>();
     public static Coordinate BestMove(PawnType[,] board, PawnType bestMoveForWho)
     {
         int bestScore = int.MinValue;
@@ -28,8 +31,19 @@ public static class MiniMax
 
     private static int MiniMaxer(PawnType[,] boardStatus, bool isMaximizing, PawnType miniMaxForWho)
     {
-        GameState result =CheckForWinner(boardStatus);
-        PawnType otherPlayer = miniMaxForWho == PawnType.O ? PawnType.X: PawnType.O;
+        Dictionary<string, object> dictForCacheKey = new Dictionary<string, object>();
+        dictForCacheKey["boardStatus"] = boardStatus;
+        dictForCacheKey["whosTurn"] = miniMaxForWho;
+        string key = JsonConvert.SerializeObject(dictForCacheKey);
+
+        if (cache.ContainsKey(key))
+        {
+            return cache[key];
+        }
+
+        GameState result = CheckForWinner(boardStatus);
+        PawnType otherPlayer = miniMaxForWho == PawnType.O ? PawnType.X : PawnType.O;
+
         if (EnumUtils.IsGameEnded(result))
         {
             switch (result)
@@ -57,6 +71,9 @@ public static class MiniMax
                 }
             }
         }
+        if (isMaximizing)
+            cache[key] = cache.ContainsKey(key) ? Math.Max(cache[key], bestScore) : bestScore;
+
         return bestScore;
     }
 
